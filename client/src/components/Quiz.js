@@ -1,53 +1,26 @@
-import React, {Component} from 'react';
-import axios from 'axios';
+import React from 'react';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormControl from '@material-ui/core/FormControl';
+import FormLabel from '@material-ui/core/FormLabel';
 
-import Input from './Input';
-import ListQuiz from './ListQuiz';
+export default function RadioButtonsGroup() {
+  const [value, setValue] = React.useState('female');
 
-class Quiz extends Component {
+  const handleChange = (event) => {
+    setValue(event.target.value);
+  };
 
-  state = {
-    quizs: []
-  }
-
-  componentDidMount(){
-    this.getQuizs();
-  }
-
-  getQuizs = () => {
-    axios.get('/api/quiz-pro')
-      .then(res => {
-        if(res.data){
-          this.setState({
-            quizs: res.data
-          })
-        }
-      })
-      .catch(err => console.log(err))
-  }
-
-  deleteQuiz = (id) => {
-
-    axios.delete(`/api/quiz-pro/${id}`)
-      .then(res => {
-        if(res.data){
-          this.getQuizs()
-        }
-      })
-      .catch(err => console.log(err))
-  }
-
-  render() {
-    let { quizs } = this.state;
-
-    return(
-      <div>
-        <h1>My Quiz(s)</h1>
-        <Input getQuizs={this.getQuizs}/>
-        <ListQuiz quizs={quizs} deleteQuiz={this.deleteQuiz}/>
-      </div>
-    )
-  }
+  return (
+    <FormControl component="fieldset">
+      <FormLabel component="legend">Gender</FormLabel>
+      <RadioGroup aria-label="gender" name="gender1" value={value} onChange={handleChange}>
+        <FormControlLabel value="female" control={<Radio />} label="Female" />
+        <FormControlLabel value="male" control={<Radio />} label="Male" />
+        <FormControlLabel value="other" control={<Radio />} label="Other" />
+        <FormControlLabel value="disabled" disabled control={<Radio />} label="(Disabled option)" />
+      </RadioGroup>
+    </FormControl>
+  );
 }
-
-export default Quiz;
