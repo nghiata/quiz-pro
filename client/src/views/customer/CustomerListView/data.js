@@ -65,7 +65,7 @@ export default [
       city: 'Dallas',
       street: '75247'
     },
-    avatarUrl: '/static/images/avatars/avatar_6.png',
+    avatarUrl: '/static/images/avatars/me.jpg',
     createdAt: 1554757200000,
     email: 'clarke.gillebert@devias.io',
     name: 'Clarke Gillebert',

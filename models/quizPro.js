@@ -13,7 +13,7 @@ const QuizProSchema = new Schema({
   },
   answer: {
       type: Number,
-      required: [true, 'ansert is required']
+      required: [true, 'answer is required']
   }
 })
 
