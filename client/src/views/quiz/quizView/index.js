@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import {
-    Box,
     Button,
     Card,
     CardContent,
@@ -10,7 +9,6 @@ import {
     makeStyles,
     Radio,
     RadioGroup,
-    Typography
 } from '@material-ui/core';
 import Page from '../../../components/Page';
 
@@ -23,70 +21,55 @@ const useStyles = makeStyles((theme) => ({
         // display: 'flex',
         // flexDirection: 'column',
         // justifyContent: 'center'
+    },
+
+    buttonStyle: {
+        display: 'flex',
+        justifyContent: 'flex-end',
+        marginTop: 10,
     }
 }));
 
-/* const QA = [
-    {
-        question: "Chemical formula of table salt?",
-        description: ["NaCl", "NaOH", "NaNO3", "All wrongs"],
-        answer: 1
-    },
-    {
-        question: "Chemical formula of table salt?",
-        description: ["NaCl", "NaOH", "NaNO3", "All wrongs"],
-        answer: 1
-    },
-    {
-        question: "Chemical formula of table salt?",
-        description: ["NaCl", "NaOH", "NaNO3", "All wrongs"],
-        answer: 1
-    },
-    {
-        question: "Chemical formula of table salt?",
-        description: ["NaCl", "NaOH", "NaNO3", "All wrongs"],
-        answer: 1
-    },
-    {
-        question: "Chemical formula of table salt?",
-        description: ["NaCl", "NaOH", "NaNO3", "All wrongs"],
-        answer: 1
-    },
-    {
-        question: "Chemical formula of table salt?",
-        description: ["NaCl", "NaOH", "NaNO3", "All wrongs"],
-        answer: 1
-    },
-] */
-
 const QuizView = () => {
     const classes = useStyles();
-    let [quiz, setQuiz] = React.useState({});
+    const [quiz, setQuiz] = React.useState({});
     const [error, setError] = React.useState(null);
 
     const handleChange = (event) => {
-        let newValue = parseInt(event.target.value);
-        quiz.answer = newValue;
-        setQuiz(quiz);
-        // alert(value);
+        let newAnswer = parseInt(event.target.value);
+        let newQuiz = { ...quiz, answer: newAnswer }
+        setQuiz(newQuiz);
     };
 
     useEffect(() => {
-        return () => {
-            fetch('::5000/api/quiz-pro')
-                .then(res => res.json())
-                .then(
-                    (res) => {
-                        setQuiz(res)
-                    },
-                    (err) => {
-                        setError(err)
-                    }
-                )
-        }
+        loadQuiz()
     }, [])
 
-    alert(JSON.stringify(quiz))
+    const loadQuiz = () => {
+        fetch('http://localhost:5000/api/quiz-pro')
+            .then(res => res.json())
+            .then(
+                (res) => {
+                    res[0].answer = ""
+                    setQuiz(res[0])
+                },
+                (err) => {
+                    setError(err)
+                }
+            )
+    }
+
+    let listAnswerView = ''
+    if (quiz.description) {
+        listAnswerView = (
+            <RadioGroup aria-label="gender" name="gender1" value={quiz.answer} onChange={handleChange}>
+                <FormControlLabel value={0} control={<Radio />} label={'A. ' + quiz.description[0]} />
+                <FormControlLabel value={1} control={<Radio />} label={'B. ' + quiz.description[1]} />
+                <FormControlLabel value={2} control={<Radio />} label={'C. ' + quiz.description[2]} />
+            </RadioGroup>
+        )
+    }
+
 
     return (
         <Page
@@ -97,15 +80,10 @@ const QuizView = () => {
                 <Card>
                     <CardHeader title={quiz.question} />
                     <CardContent>
-                        <RadioGroup aria-label="gender" name="gender1" value={quiz.answer} onChange={handleChange}>
-                            <FormControlLabel value={0} control={<Radio />} label={'A. ' + quiz.description} />
-                            <FormControlLabel value={1} control={<Radio />} label={'B. ' + quiz.description} />
-                            <FormControlLabel value={2} control={<Radio />} label={'C. ' + quiz.description} />
-                            {/* <FormControlLabel value={3} control={<Radio />} label={'D. '+ quiz.description[3]} /> */}
-                        </RadioGroup>
+                        {listAnswerView}
                     </CardContent>
                 </Card>
-                <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 10, }}>
+                <div className={classes.buttonStyle}>
                     <Button variant="contained" color="primary">Next</Button>
                 </div>
             </Container>
