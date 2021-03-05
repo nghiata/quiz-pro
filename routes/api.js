@@ -48,8 +48,7 @@ router.put('/quiz-pro/:id', (req, res, next) => {
     if (req.body) {
         QuizPro.updateOne({"_id": req.params.id}, {
             "question": req.body.question,
-            "description": req.body.description,
-            "answer": req.body.answer
+            "answers": req.body.answers
         })
         .then(data => res.json(data))
         .catch(next)

@@ -23,22 +23,19 @@ const useStyles = makeStyles((theme) => ({
         // justifyContent: 'center'
     },
 
-    buttonStyle: {
+    btnStyle: {
         display: 'flex',
-        justifyContent: 'flex-end',
-        // marginTop: 10,
-    },
-
-    backBtnStyle: {
-        display: 'flex',
-        justifyContent: 'flex-start',
+        justifyContent: 'space-between',
         marginTop: 10,
     }
 }));
 
 const QuizView = () => {
     const classes = useStyles();
-    const [quiz, setQuiz] = React.useState({});
+    let [quiz, setQuiz] = React.useState({
+        "question": "",
+        "answers": []
+    });
     const [error, setError] = React.useState(null);
     const [index, setIndex] = React.useState(0);
 
@@ -49,16 +46,17 @@ const QuizView = () => {
     };
 
     useEffect(() => {
-        loadQuiz()
-    }, [])
+        loadQuiz(index);
+    })
 
-    const loadQuiz = () => {
+    const loadQuiz = (i) => {
         fetch('http://localhost:5000/api/quiz-pro')
             .then(res => res.json())
             .then(
                 (res) => {
-                    setQuiz(res[index])
-                    res[index].answer = ""
+                    if (res) {
+                        setQuiz(res[i])
+                    }
                 },
                 (err) => {
                     setError(err)
@@ -66,26 +64,19 @@ const QuizView = () => {
             )
     }
 
-    const setNextQuestion = async () => {        
-        await setIndex(index + 1);
-        await loadQuiz();
-    }
-
-    const setBackQuestion = async () => {        
-        await setIndex(index - 1);
-        await loadQuiz();
-    }
-
-    let listAnswerView = ''
-    if (quiz['description']) {
+    let listAnswerView = '';
+    let next_disabled = index > 1 ? true : false;
+    let back_disabled = index === 0 ? true : false;
+    if (quiz) {
         listAnswerView = (
-            <RadioGroup aria-label="gender" name="gender1" value={quiz['answer']} onChange={handleChange}>
-                <FormControlLabel value={0} control={<Radio />} label={'A. ' + quiz['description'][0]} />
-                <FormControlLabel value={1} control={<Radio />} label={'B. ' + quiz['description'][1]} />
-                <FormControlLabel value={2} control={<Radio />} label={'C. ' + quiz['description'][2]} />
+            <RadioGroup aria-label="gender" name="gender1" value="" onChange={handleChange}>
+                <FormControlLabel value={0} control={<Radio />} label={'A. ' + quiz['answers'][0]} />
+                <FormControlLabel value={1} control={<Radio />} label={'B. ' + quiz['answers'][1]} />
+                <FormControlLabel value={2} control={<Radio />} label={'C. ' + quiz['answers'][2]} />
             </RadioGroup>
-        )
+        );
     }
+
 
 
     return (
@@ -101,11 +92,9 @@ const QuizView = () => {
                     </CardContent>
                 </Card>
 
-                <div className={classes.backBtnStyle}>
-                    <Button variant="contained" color="primary" onClick={setBackQuestion} >Back</Button>
-                </div>
-                <div className={classes.buttonStyle}>
-                    <Button variant="contained" color="primary" onClick={setNextQuestion} >Next</Button>
+                <div className={classes.btnStyle}>
+                    <Button variant="contained" color="primary" onClick={() => setIndex(index - 1)} disabled={back_disabled}>Back</Button>
+                    <Button variant="contained" color="primary" onClick={() => setIndex(index + 1)} disabled={next_disabled}>Next</Button>
                 </div>
             </Container>
         </Page>

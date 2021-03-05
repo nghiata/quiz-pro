@@ -7,13 +7,9 @@ const QuizProSchema = new Schema({
     type: String,
     required: [true, 'The quizPro text field is required']
   },
-  description: {
+  answers: {
       type: Array,
-      required: [true, 'description is required']
-  },
-  answer: {
-      type: Number,
-      required: [true, 'answer is required']
+      required: [true, 'answers is required']
   }
 })
 
