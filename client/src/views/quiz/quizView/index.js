@@ -47,7 +47,7 @@ const QuizView = () => {
 
     useEffect(() => {
         loadQuiz(index);
-    })
+    }, [])
 
     const loadQuiz = (i) => {
         fetch('http://localhost:5000/api/quiz-pro')
@@ -73,6 +73,7 @@ const QuizView = () => {
                 <FormControlLabel value={0} control={<Radio />} label={'A. ' + quiz['answers'][0]} />
                 <FormControlLabel value={1} control={<Radio />} label={'B. ' + quiz['answers'][1]} />
                 <FormControlLabel value={2} control={<Radio />} label={'C. ' + quiz['answers'][2]} />
+                <FormControlLabel value={3} control={<Radio />} label={'D. ' + quiz['answers'][3]} />
             </RadioGroup>
         );
     }
