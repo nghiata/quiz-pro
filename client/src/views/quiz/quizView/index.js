@@ -32,13 +32,13 @@ const useStyles = makeStyles((theme) => ({
 
 const QuizView = () => {
     const classes = useStyles();
-    const [quizCollection, setQuizCollection] = React.useState([{
+    const [quizCollection, setQuizCollection] = React.useState([])
+    const [quiz, setQuiz] = React.useState({
         "question": "",
         "answers": [],
         "your-answer": "",
         "correct-answer": ""
-    }])
-    const [quiz, setQuiz] = React.useState(quizCollection[0]);
+    });
     const [error, setError] = React.useState(null)
     const [index, setIndex] = React.useState(0)
 
@@ -49,19 +49,13 @@ const QuizView = () => {
     };
 
     useEffect(() => {
-        loadQuizCollection()
-        if (quizCollection.length) {
-            setQuiz(quizCollection[0])
-        }
-    }, [])
-
-    const loadQuizCollection = () => {
         fetch('http://localhost:5000/api/quiz-pro')
             .then(res => res.json())
             .then(
                 (res) => {
                     if (res) {
                         setQuizCollection(res)
+                        setQuiz(res[0])
                     }
                 },
                 (err) => {
@@ -69,7 +63,7 @@ const QuizView = () => {
                     alert('error: '+ err)
                 }
             )
-    }
+    }, [])    
 
     const loadQuiz = (i) => {
         setQuiz(quizCollection[i])
