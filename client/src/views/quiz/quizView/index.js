@@ -70,7 +70,7 @@ const QuizView = () => {
     }
 
     let listAnswerView = ''
-    let next_disabled = index > 0 ? true : false // need total of questions
+    let next_disabled = index > quizCollection.length - 2 ? true : false // need total of questions
     let back_disabled = index === 0 ? true : false
     if (quiz) {
         let radioItems = quiz['answers'].map((answer, index) => (
@@ -95,7 +95,7 @@ const QuizView = () => {
         >
             <Container maxWidth="lg">
                 <Card>
-                    <CardHeader title={quiz['question']} />
+                    <CardHeader title={`${index + 1}. ${quiz['question']}`} />
                     <CardContent>
                         {listAnswerView}
                     </CardContent>
