@@ -10,7 +10,8 @@ import NotFoundView from './views/errors/NotFoundView';
 import ProductListView from './views/product/ProductListView';
 import RegisterView from './views/auth/RegisterView';
 import SettingsView from './views/settings/SettingsView';
-import QuizView from './views/quiz/quizView'
+import QuizView from './views/quiz/quizView';
+import AdminView from './views/admin/adminView';
 
 const routes = [
   {
@@ -34,7 +35,8 @@ const routes = [
       { path: 'register', element: <RegisterView /> },
       { path: '404', element: <NotFoundView /> },
       { path: '/', element: <Navigate to="/app/dashboard" /> },
-      { path: '*', element: <Navigate to="/404" /> }
+      { path: '*', element: <Navigate to="/404" /> },
+      { path: 'admin', element: <AdminView /> }
     ]
   }
 ];
